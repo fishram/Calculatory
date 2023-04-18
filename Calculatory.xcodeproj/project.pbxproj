@@ -11,6 +11,7 @@
 		BB23769E29EB28FE001C430E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB23769D29EB28FE001C430E /* ContentView.swift */; };
 		BB2376A029EB28FF001C430E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB23769F29EB28FF001C430E /* Assets.xcassets */; };
 		BB2376A429EB28FF001C430E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB2376A329EB28FF001C430E /* Preview Assets.xcassets */; };
+		BB2376AB29EF5EDA001C430E /* CalculatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2376AA29EF5EDA001C430E /* CalculatorViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		BB23769F29EB28FF001C430E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BB2376A129EB28FF001C430E /* Calculatory.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Calculatory.entitlements; sourceTree = "<group>"; };
 		BB2376A329EB28FF001C430E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		BB2376AA29EF5EDA001C430E /* CalculatorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 			children = (
 				BB23769B29EB28FE001C430E /* CalculatoryApp.swift */,
 				BB23769D29EB28FE001C430E /* ContentView.swift */,
+				BB2376AA29EF5EDA001C430E /* CalculatorViewModel.swift */,
 				BB23769F29EB28FF001C430E /* Assets.xcassets */,
 				BB2376A129EB28FF001C430E /* Calculatory.entitlements */,
 				BB2376A229EB28FF001C430E /* Preview Content */,
@@ -140,6 +143,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB23769E29EB28FE001C430E /* ContentView.swift in Sources */,
+				BB2376AB29EF5EDA001C430E /* CalculatorViewModel.swift in Sources */,
 				BB23769C29EB28FE001C430E /* CalculatoryApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
