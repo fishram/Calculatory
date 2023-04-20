@@ -31,6 +31,22 @@ enum CalcButton: String {
     case plus = "+"
     case equals = "="
     case decimal = "."
+    case squareRoot = "√"
+    case square = "x²"
+    case cube = "x³"
+    case power = "x^y"
+    case sin = "sin"
+    case cos = "cos"
+    case tan = "tan"
+    case sinh = "sinh"
+    case cosh = "cosh"
+    case tanh = "tanh"
+    case e = "e"
+    case ln = "ln"
+    case log = "log₁₀"
+    case factorial = "x!"
+    case pi = "π"
+    
     
     // Determines the button's color based on its type
     var buttonColor: Color {
@@ -47,70 +63,113 @@ enum CalcButton: String {
 
 
 struct ContentView: View {
-    let buttonGrid: [[CalcButton]] = [
-        [.ac, .negative, .percent, .divide],
-        [.seven, .eight, .nine, .multiply],
-        [.four, .five, .six, .minus],
-        [.one, .two, .three, .plus],
-        [.zero, .decimal, .equals]
-    ]
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
+    var buttonGrid: [[CalcButton]] {
+            if horizontalSizeClass == .compact {
+                return [
+                    [.ac, .negative, .percent, .divide],
+                    [.seven, .eight, .nine, .multiply],
+                    [.four, .five, .six, .minus],
+                    [.one, .two, .three, .plus],
+                    [.zero, .decimal, .equals]
+                ]
+            } else {
+                return [
+                    [.ac, .negative, .percent, .divide, .sin, .cos, .tan],
+                    [.seven, .eight, .nine, .multiply, .sinh, .cosh, .tanh],
+                    [.four, .five, .six, .minus, .e, .pi, .squareRoot],
+                    [.one, .two, .three, .plus, .power, .log, .ln],
+                    [.zero, .decimal, .equals]
+                ]
+            }
+        }
     @State private var tappedButton: CalcButton? = nil
     @StateObject private var viewModel = CalculatorViewModel()
     
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
-            VStack {
-               Spacer()
-                HStack {
-                    Spacer()
-                    Text(viewModel.currentInput)
-                        .font(.system(size: 80))
-                        .foregroundColor(.white)
-                }
-                ForEach(buttonGrid, id: \.self) { row in
-                    HStack (spacing: 12){
-                        ForEach(row, id: \.self) { item in
-                            Button(action: {
-                                viewModel.buttonTapped(item)
-                            }, label: {
-                                ZStack(alignment: item == .zero ? .leading : .center) {
-                                    RoundedRectangle(cornerRadius: self.buttonWidth(item: item)/2)
-                                        .fill(item.buttonColor)
-                                    
-                                    Text(item.rawValue)
-                                        .font(.system(size: 40))
-                                        .padding(item == .zero ? EdgeInsets(top: 0, leading: 30, bottom: 0, trailing: 0) : EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                                    
-                                    if tappedButton == item {
-                                        RoundedRectangle(cornerRadius: self.buttonWidth(item: item)/2)
-                                            .fill(Color.white.opacity(0.2))
-                                    }
-                                }
-                            })
-                            .frame(width: self.buttonWidth(item: item), height: self.buttonHeight())
+            GeometryReader { geometry in
+                VStack {
+                    HStack {
+                        Spacer()
+                        Text(viewModel.currentInput)
+                            .font(.system(size: 80))
                             .foregroundColor(.white)
-                            .animation(.easeInOut(duration: 0.1), value: tappedButton == item)
-                        }
                     }
-                    .padding(.bottom, 3 )
+                    .padding(.top, geometry.safeAreaInsets.top + 20)
+                    
+                    ForEach(buttonGrid, id: \.self) { row in
+                        HStack (spacing: 12){
+                            ForEach(row, id: \.self) { item in
+                                Button(action: {
+                                    viewModel.buttonTapped(item)
+                                }, label: {
+                                    if item == .zero && horizontalSizeClass != .compact {
+                                        Text(item.rawValue)
+                                            .font(.system(size: 40))
+                                            .frame(
+                                                width: self.buttonWidth(geometry: geometry, item: item),
+                                                height: self.buttonHeight(geometry: geometry)
+                                            )
+                                            .background(item.buttonColor)
+                                            .foregroundColor(.white)
+                                            .cornerRadius(self.buttonWidth(geometry: geometry, item: item)/2)
+                                            .padding(.leading, 12)
+                                    } else {
+                                        Text(item.rawValue)
+                                            .font(.system(size: 40))
+                                            .frame(
+                                                width: self.buttonWidth(geometry: geometry, item: item),
+                                                height: self.buttonHeight(geometry: geometry)
+                                            )
+                                            .background(item.buttonColor)
+                                            .foregroundColor(.white)
+                                            .cornerRadius(self.buttonWidth(geometry: geometry, item: item)/2)
+                                    }
+                                })
+                            }
+                        }
+                        .padding(.bottom, 3)
+                    }
                 }
-                
+                .padding()
             }
-            .padding()
         }
     }
+
+
     
-    func buttonWidth(item: CalcButton) -> CGFloat {
-        if item == .zero{
-            return ((UIScreen.main.bounds.width - (3*12))/4) * 2
+    func buttonWidth(geometry: GeometryProxy, item: CalcButton) -> CGFloat {
+        let screenWidth = geometry.size.width
+        let screenHeight = geometry.size.height
+        let buttonSpace: CGFloat = 12
+        
+        let isLandscape = screenWidth > screenHeight
+        let buttonCount: CGFloat = isLandscape ? 7 : 4
+        
+        if item == .zero && !isLandscape {
+            return ((screenWidth - (buttonCount * buttonSpace)) / buttonCount) * 2
         }
-        return (UIScreen.main.bounds.width - (5*12)) / 4
+        return (screenWidth - ((buttonCount + 1) * buttonSpace)) / buttonCount
     }
-    func buttonHeight() -> CGFloat {
-        return (UIScreen.main.bounds.width - (5*12)) / 4
+
+    func buttonHeight(geometry: GeometryProxy) -> CGFloat {
+        let screenWidth = geometry.size.width
+        let screenHeight = geometry.size.height
+        let buttonSpace: CGFloat = 12
+        
+        let isLandscape = screenWidth > screenHeight
+        let buttonCount: CGFloat = isLandscape ? 7 : 4
+        let numberOfRows: CGFloat = isLandscape ? 5 : 4
+        
+        let totalSpacing = (numberOfRows + 1) * buttonSpace
+        let availableHeight = min(screenWidth, screenHeight) - totalSpacing
+        
+        return availableHeight / numberOfRows
     }
+
 }
 
 struct ContentView_Previews: PreviewProvider {
