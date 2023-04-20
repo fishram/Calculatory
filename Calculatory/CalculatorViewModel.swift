@@ -10,12 +10,31 @@ import SwiftUI
 import Combine
 
 class CalculatorViewModel: ObservableObject {
-    @Published var currentInput: String = "0"
-    @Published var previousInput: String = ""
+    @Published var previousInput: String = "0"
     @Published var currentOperation: CalcButton? = nil
     private var firstValue: Double?
     private var operation: CalcButton?
-    
+    @Published var currentInput: String = "0"
+    private var result: Double? {
+            didSet {
+                guard let result = result else { return }
+                currentInput = String(result)
+            }
+        }
+    private var storedValue: Double?
+    var formattedInput: String {
+        if currentInput.isEmpty {
+            if let result = result {
+                let isInteger = floor(result) == result
+                return isInteger ? String(format: "%.0f", result) : String(result)
+            } else {
+                return "0"
+            }
+        } else {
+            return currentInput
+        }
+    }
+
     func buttonTapped(_ item: CalcButton) {
         switch item {
         case .ac:

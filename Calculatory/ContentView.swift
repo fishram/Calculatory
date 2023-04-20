@@ -31,21 +31,30 @@ enum CalcButton: String {
     case plus = "+"
     case equals = "="
     case decimal = "."
-    case squareRoot = "√"
-    case square = "x²"
-    case cube = "x³"
-    case power = "x^y"
-    case sin = "sin"
-    case cos = "cos"
-    case tan = "tan"
-    case sinh = "sinh"
-    case cosh = "cosh"
-    case tanh = "tanh"
-    case e = "e"
-    case ln = "ln"
-    case log = "log₁₀"
-    case factorial = "x!"
-    case pi = "π"
+    case second = "2^nd"
+        case square = "x^2"
+        case cube = "x^3"
+        case power = "x^y"
+        case exp = "e^x"
+        case tenPower = "10^x"
+        case reciprocal = "1/x"
+        case squareRoot = "√x"
+        case cubeRoot = "∛x"
+        case yRoot = "y√x"
+        case ln = "ln"
+        case log = "log₁₀"
+        case factorial = "x!"
+        case sin = "sin"
+        case cos = "cos"
+        case tan = "tan"
+        case e = "e"
+        case ee = "EE"
+        case rad = "Rad"
+        case sinh = "sinh"
+        case cosh = "cosh"
+        case tanh = "tanh"
+        case pi = "π"
+        case rand = "Rand"
     
     
     // Determines the button's color based on its type
@@ -76,10 +85,11 @@ struct ContentView: View {
                 ]
             } else {
                 return [
-                    [.ac, .negative, .percent, .divide, .sin, .cos, .tan],
-                    [.seven, .eight, .nine, .multiply, .sinh, .cosh, .tanh],
-                    [.four, .five, .six, .minus, .e, .pi, .squareRoot],
-                    [.one, .two, .three, .plus, .power, .log, .ln],
+                    [.second, .square, .cube, .power, .exp, .tenPower, .reciprocal, .ac, .negative, .percent, .divide],
+                    [.squareRoot, .cubeRoot, .yRoot, .ln, .log, .factorial, .sin, .cos, .tan, .multiply, .minus],
+                    [.e, .ee, .rad, .sinh, .cosh, .tanh, .seven, .eight, .nine, .plus],
+                    [.pi, .rand, .four, .five, .six],
+                    [.one, .two, .three],
                     [.zero, .decimal, .equals]
                 ]
             }
@@ -92,11 +102,15 @@ struct ContentView: View {
             Color.black.ignoresSafeArea()
             GeometryReader { geometry in
                 VStack {
+                    Spacer()
                     HStack {
                         Spacer()
                         Text(viewModel.currentInput)
                             .font(.system(size: 80))
                             .foregroundColor(.white)
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(1)
+                            .frame(minHeight: 100)
                     }
                     .padding(.top, geometry.safeAreaInsets.top + 20)
                     
